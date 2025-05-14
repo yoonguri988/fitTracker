@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import useCounterStore from "./stores/useCounterStore";
+// import reactLogo from "./assets/react.svg";
+// import viteLogo from "/vite.svg";
+// import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0);
+  const count = useCounterStore((state) => state.count);
+  const increase = useCounterStore((state) => state.increase);
+  const decrease = useCounterStore((state) => state.decrease);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="bg-red-500 text-white p-4 text-xl">
+        Tailwind 적용 성공!
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <h1 className="text-2xl font-bold mb-4">Zustand 상태 테스트</h1>
+        <p className="text-xl mb-4">Count: {count}</p>
+        <div>
+          <button
+            onClick={increase}
+            className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
+          >
+            증가
+          </button>
+          <button
+            onClick={decrease}
+            className="bg-red-500 text-white px-4 py-2 rounded"
+          >
+            감소
+          </button>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

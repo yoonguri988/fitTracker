@@ -1,6 +1,20 @@
+import Button from "../components/ui/Button";
+
 function DashboardPage() {
+  function handleClick() {
+    alert("저장됨!");
+  }
+
   return (
-    <div className="p-4 text-xl font-bold"> Dashboard ('/') 홈 페이지</div>
+    <div>
+      <Title>(예시) 오늘의 건강 상태</Title>
+      <Card>
+        <p>근육량: 20%</p>
+        <p>체지방률: 29%</p>
+      </Card>
+      <Input label="메모 남기기" placeholder="오늘 운동은 어땠나요?" />
+      <Button onClick={handleClick}>저장</Button>
+    </div>
   );
 }
 export default DashboardPage;

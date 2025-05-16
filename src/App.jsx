@@ -4,6 +4,7 @@ import RoutinePage from "./pages/RoutinePage";
 import StatsPage from "./pages/StatsPage";
 import RecordPage from "./pages/RecordPage";
 import SettingsPage from "./pages/SettingsPage";
+import Layout from "./components/Layout";
 // import useCounterStore from "./stores/useCounterStore";
 // import './App.css'
 
@@ -14,11 +15,13 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<DashboardPage />} />
-      <Route path="/routine" element={<RoutinePage />} />
-      <Route path="/stats" element={<StatsPage />} />
-      <Route path="/record" element={<RecordPage />} />
-      <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<DashboardPage />} />
+        <Route path="routine" element={<RoutinePage />} />
+        <Route path="record" element={<RecordPage />} />
+        <Route path="stats" element={<StatsPage />} />
+        <Route path="settings" element={<SettingsPage />} />
+      </Route>
     </Routes>
     // <>
     //   <div className="bg-red-500 text-white p-4 text-xl">

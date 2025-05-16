@@ -21,3 +21,8 @@ ToyProject: 나만의 홈트 &amp; 건강 모니터링 웹 앱
 
 ◼️ 각 페이지 파일을 만들고 간단한 제목이나 더미 내용을 넣어 라우팅이 잘 되는지 확인합니다.<br>
 ▪️ DashboardPage.jsx, RoutinePage.jsx 등
+
+### 🦝 공통 UI 컴포넌트 만들기
+
+◼️ Navbar, Card, Button 같은 재사용 가능한 UI 컴포넌트를 만들고 페이지에서 불러옵니다.<br>
+▪️ TailwindCSS로 기본적인 스타일을 입힙니다.

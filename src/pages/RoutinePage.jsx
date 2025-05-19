@@ -25,11 +25,22 @@ const DEF_VALUES = {
 function RoutinePage() {
   const { routines, creRoutine, updRoutine, delRoutine } = useRoutineStore();
   const [values, setValues] = useState(DEF_VALUES);
+  const [errMsg, setErrMsg] = useState({});
+
+  //errMsg
+  const vaildate = () => {
+    // day, name, time 은 필수
+    const newErrs = {};
+    if (!values.day) newErrs.day = "요일을 선택하세요";
+    if (!values.name.trim()) newErrs.name = "운동 이름을 입력하세요";
+    if (!values.time) newErrs.time = "시간을 입력하세요";
+    setErrMsg(newErrs);
+    return Object.keys(newErrs).length === 0;
+  };
 
   const handleCreClick = () => {
     const { day, name, time, sets, reps } = values;
-    // day, name, time 은 필수
-    if (!day || !name.trim() || !time) return;
+    if (!vaildate()) return;
 
     const newValues = {
       day: day,
@@ -49,9 +60,7 @@ function RoutinePage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setValues((prev) => ({ ...prev, [name]: value }));
-    console.log(values.day);
   };
 
   return (
@@ -59,20 +68,23 @@ function RoutinePage() {
       <div className="p-6">
         <h2 className="text-xl font-semibold mb-4">요일별 운동 루틴</h2>
 
-        <div className="flex space-x-2 mb-6">
-          {DAYS.map((day) => (
-            <Button
-              key={day}
-              name="day"
-              value={day}
-              onClick={handleChange}
-              className={`text-base basis-1/6 px-3 py-1 rounded ${
-                values.day === day ? "bg-green-800" : ""
-              }`}
-            >
-              {day}
-            </Button>
-          ))}
+        <div className="mb-6">
+          <div className="flex space-x-2">
+            {DAYS.map((day) => (
+              <Button
+                key={day}
+                name="day"
+                value={day}
+                onClick={handleChange}
+                className={`text-base basis-1/6 px-3 py-1 rounded ${
+                  values.day === day ? "bg-green-800" : ""
+                }`}
+              >
+                {day}
+              </Button>
+            ))}
+          </div>
+          {errMsg.day && <div className="my-2 text-red-400">{errMsg.day}</div>}
         </div>
         <div className="mb-4 flex-1 gap-2">
           <InputCard>
@@ -82,6 +94,8 @@ function RoutinePage() {
                   type="text"
                   name="name"
                   placeholder="운동 이름"
+                  value={values.name}
+                  errMsg={errMsg.name}
                   onChange={handleChange}
                   className="border px-5 py-1"
                 />
@@ -99,36 +113,40 @@ function RoutinePage() {
                   type="number"
                   name="time"
                   placeholder="0"
+                  value={values.time}
+                  errMsg={errMsg.time}
+                  unitName="분"
                   onChange={handleChange}
                   className="border px-3 py-1 rounded w-full pr-10"
                 />
-                <span className="absolute right-5 top-1/2 transform -translate-y-5 text-base text-gray-400">
-                  분
-                </span>
               </div>
               <div className="relative w-full max-w-[100px]">
                 <Input
                   type="number"
                   name="sets"
                   placeholder="0"
+                  value={values.sets}
+                  unitName="세트"
                   onChange={handleChange}
                   className="border px-3 py-1 rounded"
                 />
-                <span className="absolute right-5 top-1/2 transform -translate-y-5 text-base text-gray-400">
+                {/* <span className="absolute right-5 top-1/2 transform -translate-y-5 text-base text-gray-400">
                   세트
-                </span>
+                </span> */}
               </div>
               <div className="relative w-full max-w-[100px]">
                 <Input
                   type="number"
                   name="reps"
                   placeholder="0"
+                  value={values.reps}
+                  unitName="회"
                   onChange={handleChange}
                   className="border px-3 py-1 rounded"
                 />
-                <span className="absolute right-5 top-1/2 -translate-y-5 text-base text-gray-400">
+                {/* <span className="absolute right-5 top-1/2 -translate-y-5 text-base text-gray-400">
                   회
-                </span>
+                </span> */}
               </div>
             </div>
           </InputCard>

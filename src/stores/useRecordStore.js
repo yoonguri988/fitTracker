@@ -27,7 +27,13 @@ const useRecordStore = create(
       updReps: (id, reps) =>
         set((state) => ({
           records: state.records.map((record) =>
-            record.id === id ? { ...record, completedReps: reps } : record
+            record.id === id
+              ? {
+                  ...record,
+                  completedSets: record.completedSets + 1,
+                  completedReps: [...record.completedReps, reps],
+                }
+              : record
           ),
         })),
 
@@ -40,6 +46,8 @@ const useRecordStore = create(
           ...recordInput,
           id: uuidv4(),
           createdAt: new Date().toISOString().split("T")[0],
+          completedSets: 0,
+          completedReps: [],
         };
         const result = recordSchema.safeParse(newRecord);
 
@@ -70,9 +78,13 @@ const useRecordStore = create(
     {
       name: STORAGE_KEY,
       storage: {
-        getItem: (key) => sessionStorage.getItem(key),
-        setItem: (key, value) =>
-          sessionStorage.getItem(key, JSON.stringify(value)),
+        getItem: (key) => {
+          const value = sessionStorage.getItem(key);
+          return value ? JSON.parse(value) : null;
+        },
+        setItem: (key, value) => {
+          sessionStorage.setItem(key, JSON.stringify(value));
+        },
         removeItem: (key) => sessionStorage.removeItem(key),
       },
     }

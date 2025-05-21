@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
+} from "@/components/ui/Dialog";
 function CompletedRepsModal({ initReps, open, onClose, onSave }) {
   const [reps, setReps] = useState(initReps);
   const handleSave = () => {

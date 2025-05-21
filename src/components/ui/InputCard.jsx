@@ -1,8 +1,12 @@
-function InputCard({ children, className = "" }) {
+function InputCard({ children, onSubmit, className = "" }) {
   return (
-    <div className={`bg-accent p-4 rounded-xl shadow ${className}`}>
+    <form
+      method="post"
+      onSubmit={onSubmit}
+      className={`bg-accent p-4 rounded-xl shadow ${className}`}
+    >
       {children}
-    </div>
+    </form>
   );
 }
 export default InputCard;

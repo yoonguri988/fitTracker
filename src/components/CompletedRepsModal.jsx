@@ -1,15 +1,15 @@
 import { useState } from "react";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/Input";
-function CompletedRepsModal({ open, onClose, onSave }) {
-  const [reps, setReps] = useState("");
-
+} from "@/components/ui/Dialog";
+function CompletedRepsModal({ initReps, open, onClose, onSave }) {
+  const [reps, setReps] = useState(initReps);
   const handleSave = () => {
     const parse = parseInt(reps);
     if (!isNaN(parse)) {
@@ -29,7 +29,7 @@ function CompletedRepsModal({ open, onClose, onSave }) {
         </DialogHeader>
         <Input
           type="number"
-          placeholder="예: 12"
+          placeholder={`${initReps}`}
           value={reps}
           onChange={(e) => setReps(e.target.value)}
         />

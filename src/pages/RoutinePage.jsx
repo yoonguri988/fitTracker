@@ -51,7 +51,6 @@ function RoutinePage() {
     };
 
     creRoutine(newValues);
-
     // 초기화
     setValues(DEF_VALUES);
   };

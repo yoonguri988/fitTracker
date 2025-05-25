@@ -12,7 +12,7 @@ function Button({
       name={name}
       value={value}
       onClick={onClick}
-      className={`bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl ${className}`}
+      className={`bg-btn-sub text-sub px-4 py-2 rounded-xl hover:bg-btn-main ${className} `}
     >
       {children}
     </button>

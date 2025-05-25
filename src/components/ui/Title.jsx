@@ -1,4 +1,4 @@
 function Title({ children }) {
-  return <h1 className="text-2xl font-bold mb-4">{children}</h1>;
+  return <div className="text-main text-2xl font-bold mb-4">{children}</div>;
 }
 export default Title;

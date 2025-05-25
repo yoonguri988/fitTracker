@@ -68,9 +68,9 @@ const useRoutineStore = create(
 
         set((state) => ({
           routines: [
-            ...state.routines.splice(0, spIdx),
+            ...state.routines.slice(0, spIdx),
             routine,
-            ...state.routines.splice(spIdx + 1),
+            ...state.routines.slice(spIdx + 1),
           ],
         }));
       },

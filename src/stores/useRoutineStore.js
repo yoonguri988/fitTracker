@@ -1,17 +1,20 @@
+import { v4 as uuidv4 } from "uuid";
+import { format } from "date-fns";
 import { z } from "zod";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+
+const STORAGE_KEY = "fittracker-routines-session";
 
 const RoutineSchema = z.object({
-  id: z.number(),
-  day: z.string(),
+  id: z.string(),
+  day: z.string().min(1, "요일을 선택하세요"),
   name: z.string(),
-  time: z.number(),
-  // sets: z.number(),
-  // reps: z.number(),
-  // description: z.string().optional(),
-  // isActive: z.boolean(),
-  // createdAt: z.string(),
+  time: z.coerce.number(),
+  sets: z.coerce.number(),
+  reps: z.coerce.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 });
 
 const chk = (data) => {
@@ -21,36 +24,84 @@ const chk = (data) => {
 
 const useRoutineStore = create(
   persist(
-    (set) => ({
+    (set, get) => ({
       routines: [],
-      creRoutine: (routineData) => {
-        const routine = { ...routineData, id: Date.now() };
-        if (chk(routine)) {
-          // 유효하지 않으면 추가하지 않음
-          console.error("Invalid routine:", result.error.issues);
+
+      // 새로운 루틴 추가
+      addRoutine: (data) => {
+        const now = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+        const routine = {
+          ...data,
+          id: uuidv4(),
+          createdAt: now,
+          updatedAt: now,
+        };
+
+        const result = RoutineSchema.safeParse(routine);
+        if (!result.success) {
+          console.error(
+            `routine 데이터 유효성 검사 실패: ${result.error.format()}`
+          );
           return;
         }
+
         set((state) => ({
           routines: [routine, ...state.routines],
         }));
       },
-      updRoutine: (routineData) => {
-        const routine = { ...routineData, id: Date.now() };
+
+      // 루틴 수정
+      updRoutine: (data) => {
+        const routine = {
+          ...data,
+          updatedAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+        };
         if (chk(routine)) {
-          // 유효하지 않으면 변경되지 않음
-          console.error("Invalid routine:", result.error.issues);
+          console.error("Invalid routine");
           return;
         }
+
+        const { routines } = get();
+        const spIdx = routines.findIndex((routine) => {
+          return routine.id === data.id;
+        });
+
+        set((state) => ({
+          routines: [
+            ...state.routines.slice(0, spIdx),
+            routine,
+            ...state.routines.slice(spIdx + 1),
+          ],
+        }));
       },
+
+      // 루틴 삭제
       delRoutine: (id) =>
         set((state) => ({
           routines: state.routines.filter((routine) => routine.id !== id),
         })),
+
+      getFilterRoutines: (day) => {
+        const { routines } = get();
+        if (day === "0") return routines;
+        else
+          return routines.filter(
+            (routine) => String(routine.day) === String(day)
+          );
+      },
     }),
     {
-      // name: "fittracker-routines", //localStorage Key 이름
-      name: "fittracker-routines-session", //sessionStorage Key 이름
-      storage: createJSONStorage(() => sessionStorage), //session일때만
+      name: STORAGE_KEY, //sessionStorage Key 이름
+      storage: {
+        getItem: (key) => {
+          const value = sessionStorage.getItem(key);
+          return value ? JSON.parse(value) : null;
+        },
+        setItem: (key, value) => {
+          sessionStorage.setItem(key, JSON.stringify(value));
+        },
+        removeItem: (key) => sessionStorage.removeItem(key),
+      },
     }
   )
 );

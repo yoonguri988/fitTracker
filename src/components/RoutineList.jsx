@@ -1,32 +1,22 @@
 import { useState } from "react";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import Select from "@/components/ui/Select";
 import RoutineForm from "@/components/RoutineForm";
+import { DayTabByDay } from "@/components/ui/DayTab";
+import { Select } from "@/components/ui/Select";
 
-function RoutineListItem({ value, days, onDelete, onUpdate }) {
+function RoutineListItem({ value, onDelete, onUpdate }) {
   const handleDelete = () => onDelete(value.id);
   const handleUpdate = () => onUpdate(value.id);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-  };
-
   return (
     <Card className="flex justify-between items-center gap-2">
-      <div className="">
-        <Button
-          name="day"
-          value={value.day}
-          onClick={handleChange}
-          className={`!bg-btn-main !text-sub`}
-          disabled={true}
-        >
-          {days[value.day - 1]}
-        </Button>
+      <DayTabByDay day={value.day} />
+      <div className="basis-5/12">
+        <div>{value.name}</div>
+        <Select name="category" value={value.category} list="CATEGORY" />
       </div>
-      <div className="basis-5/12">{value.name}</div>
-      <div className="basis-3/12">
+      <div className="basis-4/12">
         <div>{value.time}분</div>
         <div>
           {value.sets !== 0 && (
@@ -51,13 +41,7 @@ function RoutineListItem({ value, days, onDelete, onUpdate }) {
   );
 }
 
-export default function RoutineList({
-  items,
-  days,
-  onUpdate,
-  onDelete,
-  onClear,
-}) {
+export default function RoutineList({ items, onUpdate, onDelete, onReset }) {
   const [editId, setEditId] = useState(null);
   const handleCancel = () => setEditId(null);
 
@@ -81,9 +65,9 @@ export default function RoutineList({
             <li key={item.id}>
               <RoutineForm
                 initValues={item}
-                days={days}
                 onSubmit={handleSubmit}
                 onCancel={handleCancel}
+                className="rounded-xl p-4 shadow-md"
               />
             </li>
           );
@@ -92,7 +76,6 @@ export default function RoutineList({
           <li key={item.id} className="my-2">
             <RoutineListItem
               value={item}
-              days={days}
               onDelete={onDelete}
               onUpdate={setEditId}
             />
@@ -101,7 +84,7 @@ export default function RoutineList({
       })}
       {items.length !== 0 && (
         <li className="text-center mt-5">
-          <Button onClick={onClear} className="w-20">
+          <Button onClick={onReset} className="w-20">
             초기화
           </Button>
         </li>

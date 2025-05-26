@@ -3,7 +3,7 @@ import BottomNav from "./BottomNav";
 
 function Layout() {
   return (
-    <div className="min-h-screen bg-white pb-20 font-sans">
+    <div className=" bg-white pb-20">
       <main className="">
         <Outlet /> {/** 각 페이지가 렌더링 */}
       </main>

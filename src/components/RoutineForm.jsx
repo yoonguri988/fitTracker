@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import Select from "@/components/ui/Select";
-import useRoutineStore from "@/stores/useRoutineStore";
+import { useModalStore } from "@/stores/useModalStore";
+import { RoutineSchema } from "@/schema/RoutineSchema";
 
 const INTI_VALUES = {
   id: "",
@@ -20,8 +20,10 @@ export default function RoutineForm({
   onCancel,
   className = "",
 }) {
-  const { routines } = useRoutineStore();
+  const { closeModal } = useModalStore();
   const [values, setValues] = useState(initValues);
+  const [errors, setErrors] = useState({});
+  const [isVaild, setIsVaild] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,83 +32,102 @@ export default function RoutineForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    closeModal();
 
     onSubmit({ ...values, day: String(values.day) });
     //초기화
     setValues(INTI_VALUES);
   };
 
+  useEffect(() => {
+    const result = RoutineSchema.safeParse(values);
+    if (result.success) {
+      setIsVaild(true);
+      setErrors({});
+    } else {
+      setIsVaild(false);
+      setErrors(result.error.formErrors.fieldErrors);
+    }
+  }, [values]);
+
   return (
     <form
       method="post"
       onSubmit={handleSubmit}
-      className={`bg-base-point p-4 rounded-xl shadow`}
+      className={`bg-base-point p-1.5 rounded-sm shadow ${className}`}
     >
-      <div className="flex justify-between gap-2">
-        <div className="relative basis-1/12">
-          <Select
-            name="day"
-            value={String(values.day)}
-            list={days}
-            onChange={handleChange}
-            disabled={false}
-          />
+      <div>
+        <div className="flex justify-between mb-2">
+          {days.map((day, i) => (
+            <Button
+              key={day}
+              name="day"
+              value={String(i + 1)}
+              onClick={handleChange}
+              className={`${
+                String(i + 1) === values.day ? "!bg-btn-main" : ""
+              }`}
+            >
+              {day}
+            </Button>
+          ))}
         </div>
-        <div className="relative basis-1/2">
+        <div className="mb-1">
           <Input
             type="text"
             name="name"
-            placeholder="운동 이름"
+            placeholder="운동 이름 (최대 20자)"
             value={values.name}
             onChange={handleChange}
+            label={`운동 이름`}
           />
-        </div>
-        <div className="relative basis-1/2">
-          <div className="flex justify-start">
-            <Input
-              type="number"
-              name="time"
-              placeholder="0"
-              unit="분"
-              value={values.time}
-              onChange={handleChange}
-              className={`mb-2 w-3/4`}
-            />
-            <span className="text-sub mt-1 ml-1">분</span>
-          </div>
-          <div className="flex justify-start">
+          <Input
+            type="number"
+            name="time"
+            placeholder="0"
+            value={values.time}
+            onChange={handleChange}
+            label={`운동 시간`}
+            unit="분"
+          />
+          <div className="mb-1">상세 기록</div>
+          <div className="flex justify-between mb-2">
             <Input
               type="number"
               name="sets"
               placeholder="0"
               value={values.sets}
               onChange={handleChange}
-              className={`w-1/4`}
+              unit={`세트`}
+              className={`w-1/2 mr-2`}
             />
-            <span className="text-sub mt-1 ml-1">세트</span>
-            <div className="text-sub mt-1 mx-1">X</div>
             <Input
               type="number"
               name="reps"
               placeholder="0"
               value={values.reps}
               onChange={handleChange}
-              className={`w-1/4`}
+              unit={`회`}
+              className={`w-1/2`}
             />
-            <span className="text-sub mt-1 ml-1">회</span>
           </div>
-        </div>
-        <div className="relative basis-1/6">
-          <Button type="submit">확인</Button>
-          {onCancel && (
-            <Button
-              type="button"
-              onClick={onCancel}
-              className="bg-sub-light mt-1"
-            >
-              취소
+          <div className="m-2">
+            * 상세기록을 입력하지 않으면 0으로 자동 입력돼요.
+          </div>
+          <div>
+            <Button type="submit" disabled={!isVaild} className="w-full">
+              추가하기
             </Button>
-          )}
+            {onCancel && (
+              <Button
+                type="button"
+                onClick={onCancel}
+                className={`bg-sub-lg mt-1 hover:bg-sub-dk hover:bg-opacity-30`}
+              >
+                취소
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </form>

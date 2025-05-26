@@ -3,7 +3,6 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import RoutineForm from "@/components/RoutineForm";
-import useRoutineStore from "@/stores/useRoutineStore";
 
 function RoutineListItem({ value, days, onDelete, onUpdate }) {
   const handleDelete = () => onDelete(value.id);
@@ -14,40 +13,51 @@ function RoutineListItem({ value, days, onDelete, onUpdate }) {
   };
 
   return (
-    <Card className="flex justify-between items-center">
-      <div className="basis-1/6 text-main">
-        <Select
+    <Card className="flex justify-between items-center gap-2">
+      <div className="">
+        <Button
           name="day"
           value={value.day}
-          list={days}
-          onChange={handleChange}
-          disabled="disabled"
-        />
-      </div>
-      <div className="basis-1/2 text-main ">{value.name}</div>
-      <div className="basis-2/6 text-main">
-        <div>{value.time}분</div>
-        <div>
-          {value.sets}세트 x {value.reps}회
-        </div>
-      </div>
-
-      <div className="basis-1/6 text-main">
-        <Button onClick={handleUpdate} className="text-sub rounded-full">
-          수정
+          onClick={handleChange}
+          className={`!bg-btn-main !text-sub`}
+          disabled={true}
+        >
+          {days[value.day - 1]}
         </Button>
       </div>
-      <button
-        onClick={handleDelete}
-        className="text-btn-del hover:text-sub px-2 py-1 text-2xl text-bold"
-      >
-        X
-      </button>
+      <div className="basis-5/12">{value.name}</div>
+      <div className="basis-3/12">
+        <div>{value.time}분</div>
+        <div>
+          {value.sets !== 0 && (
+            <>
+              {value.sets}세트 x {value.reps}회
+            </>
+          )}
+        </div>
+      </div>
+      <div className="basis-2/12">
+        <Button onClick={handleUpdate}>수정</Button>
+      </div>
+      <div className="">
+        <button
+          onClick={handleDelete}
+          className="text-btn-del hover:text-sub text-sm"
+        >
+          ✕
+        </button>
+      </div>
     </Card>
   );
 }
 
-export default function RoutineList({ items, days, onUpdate, onDelete }) {
+export default function RoutineList({
+  items,
+  days,
+  onUpdate,
+  onDelete,
+  onClear,
+}) {
   const [editId, setEditId] = useState(null);
   const handleCancel = () => setEditId(null);
 
@@ -79,7 +89,7 @@ export default function RoutineList({ items, days, onUpdate, onDelete }) {
           );
         }
         return (
-          <li key={item.id} className="my-3">
+          <li key={item.id} className="my-2">
             <RoutineListItem
               value={item}
               days={days}
@@ -89,6 +99,13 @@ export default function RoutineList({ items, days, onUpdate, onDelete }) {
           </li>
         );
       })}
+      {items.length !== 0 && (
+        <li className="text-center mt-5">
+          <Button onClick={onClear} className="w-20">
+            초기화
+          </Button>
+        </li>
+      )}
     </ul>
   );
 }

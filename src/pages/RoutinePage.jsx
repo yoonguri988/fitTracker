@@ -3,7 +3,9 @@ import Title from "@/components/ui/Title";
 import Button from "@/components/ui/Button";
 import RoutineForm from "@/components/RoutineForm";
 import RoutineList from "@/components/RoutineList";
-import useRoutineStore from "@/stores/useRoutineStore";
+import { useRoutineStore } from "@/stores/useRoutineStore";
+import { useModalStore } from "@/stores/useModalStore";
+import { Modal } from "@/components/Modal";
 
 /**
  * @description
@@ -16,8 +18,15 @@ const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 
 function RoutinePage() {
   const [selectedDay, setSelectedDay] = useState("0");
-  const { routines, getFilterRoutines, addRoutine, updRoutine, delRoutine } =
-    useRoutineStore();
+  const {
+    routines,
+    getFilterRoutines,
+    addRoutine,
+    updRoutine,
+    delRoutine,
+    initialRoutines,
+  } = useRoutineStore();
+  const { openModal } = useModalStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,28 +41,38 @@ function RoutinePage() {
   };
 
   const handleUpdate = (routine) => {
-    console.log(routine);
     updRoutine(routine);
+  };
+
+  const handleClear = () => {
+    initialRoutines(selectedDay);
   };
 
   return (
     <div className="min-h-screen">
       <div className="p-6">
-        <Title>요일별 운동 루틴</Title>
+        <div className="flex justify-center mb-2">
+          <Title>요일별 운동 루틴</Title>
+          {/* <Button onClick={handleInitial}>초기화</Button> */}
+        </div>
+        <div className="mb-2">
+          <Modal>
+            <div className="mb-2">
+              <RoutineForm
+                days={DAYS}
+                onSubmit={addRoutine}
+                className="shadow-none"
+              />
+            </div>
+          </Modal>
 
-        <div className="mb-6">
-          <div className="mb-4 flex-1 gap-2">
-            <RoutineForm days={DAYS} onSubmit={addRoutine} />
-          </div>
-          <div className="flex space-x-2">
+          <div className="flex justify-between">
             <Button
               key="all"
               name="day"
               value={String(0)}
               onClick={handleChange}
-              className={`basis-1/6 ${
-                selectedDay === "0" ? "!bg-btn-main" : ""
-              }`}
+              className={`${selectedDay === "0" ? "!bg-btn-main" : ""}`}
             >
               전체
             </Button>
@@ -63,7 +82,7 @@ function RoutinePage() {
                 name="day"
                 value={String(i + 1)}
                 onClick={handleChange}
-                className={`basis-1/6 ${
+                className={`${
                   String(i + 1) === selectedDay ? "!bg-btn-main" : ""
                 }`}
               >
@@ -78,7 +97,17 @@ function RoutinePage() {
             days={DAYS}
             onDelete={handleDelete}
             onUpdate={handleUpdate}
+            onClear={handleClear}
           />
+        </div>
+        <div className="fixed right-5 bottom-24 z-50">
+          <Button
+            name="input-popup"
+            onClick={openModal}
+            className="bg-btn-sub text-3xl"
+          >
+            ✍🏻
+          </Button>
         </div>
       </div>
     </div>

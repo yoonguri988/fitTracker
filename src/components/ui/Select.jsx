@@ -4,6 +4,7 @@ export default function Select({
   list,
   onChange,
   disabled = true,
+  className = "",
 }) {
   return (
     <select
@@ -11,7 +12,7 @@ export default function Select({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      className={`!bg-btn-main !text-sub px-3 py-2 rounded-xl appearance-none`}
+      className={`bg-btn-main text-sub appearance-none ${className}`}
     >
       {list.map((r, i) => (
         <option key={r} value={String(i + 1)}>

@@ -35,6 +35,7 @@ function RoutinePage() {
     const { name, value } = e.target;
     if (name === "day") {
       setSelectedDay(value);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 

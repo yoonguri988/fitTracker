@@ -13,7 +13,7 @@ const navItems = [
 
 function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-btn-main h-16 flex justify-around items-center rounded-tl-xl rounded-tr-xl z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-btn-main h-16 flex justify-around items-center rounded-tl-xl rounded-tr-xl z-40">
       {navItems.map((item) => (
         <NavLink
           key={item.to}

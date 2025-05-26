@@ -18,7 +18,7 @@ export function Select({ name, value, list = "", className = "" }) {
       name={name}
       value={value}
       disabled
-      className={`appearance-none ${className}`}
+      className={`appearance-none bg-base text-sub-dk ${className}`}
     >
       {DATA[list].map((r, i) => (
         <option key={r} value={i}>

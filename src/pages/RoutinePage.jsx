@@ -87,13 +87,18 @@ function RoutinePage() {
             onCancel={handleCancel}
           />
         </div>
-        <div className="mb-2">
+        <div className="mb-2 sticky top-0 bg-white z-40 p-2">
           <RoutineFormModal>
             <div className="mb-2">
               <RoutineForm onSubmit={addRoutine} className="shadow-none" />
             </div>
           </RoutineFormModal>
-          <DayTab day={selectedDay} all={true} onClick={handleChange} />
+          <DayTab
+            day={selectedDay}
+            all={true}
+            onClick={handleChange}
+            className={``}
+          />
         </div>
         <div className="space-y-4">
           <RoutineList
@@ -103,7 +108,7 @@ function RoutinePage() {
             onReset={handleReset}
           />
         </div>
-        <div className="fixed right-5 bottom-24 z-50">
+        <div className="fixed right-5 bottom-24 z-40">
           <Button
             name="input-popup"
             onClick={openModal}

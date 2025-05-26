@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import Title from "@/components/ui/Title";
 import Button from "@/components/ui/Button";
+import { DayTab } from "@/components/ui/DayTab";
 import RoutineForm from "@/components/RoutineForm";
+import { RoutineFormModal } from "@/components/RoutineFormModal";
 import RoutineList from "@/components/RoutineList";
 import { useRoutineStore } from "@/stores/useRoutineStore";
 import { useModalStore } from "@/stores/useModalStore";
-import { Modal } from "@/components/Modal";
+import ConfirmOverwriteModal from "@/components/ui/ConfirmOverwriteModal";
 
 /**
  * @description
@@ -14,38 +16,56 @@ import { Modal } from "@/components/Modal";
  * ⌞루틴 카드 or 텍스트 (삭제 버튼 포함)
  * 루틴 추가 입력창 (운동명 입력 추가 버튼)
  */
-const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
-
 function RoutinePage() {
   const [selectedDay, setSelectedDay] = useState("0");
   const {
     routines,
-    getFilterRoutines,
+    getFilterRoutines = () => [],
     addRoutine,
-    updRoutine,
-    delRoutine,
-    initialRoutines,
+    updateRoutine,
+    deleteRoutine,
+    resetRoutines,
+    generateAutoRoutine,
   } = useRoutineStore();
   const { openModal } = useModalStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const filteredRoutines = getFilterRoutines?.(selectedDay) ?? [];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "day") {
       setSelectedDay(value);
     }
   };
 
   const handleDelete = (id) => {
-    delRoutine(id);
+    deleteRoutine(id);
   };
 
   const handleUpdate = (routine) => {
-    updRoutine(routine);
+    updateRoutine(routine);
   };
 
-  const handleClear = () => {
-    initialRoutines(selectedDay);
+  const handleReset = () => {
+    resetRoutines(selectedDay);
+  };
+
+  const handleAutoRoutine = () => {
+    if (routines.length > 0) {
+      setIsModalOpen(true); // 모달 열기
+    } else {
+      generateAutoRoutine(); // 바로 생성
+    }
+  };
+
+  const handleConfirm = () => {
+    resetRoutines("0"); // 전체 루틴 삭제
+    generateAutoRoutine(); // 다시 생성
+    setIsModalOpen(false); // 모달 닫기
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false); // 모달 닫기
   };
 
   return (
@@ -53,51 +73,34 @@ function RoutinePage() {
       <div className="p-6">
         <div className="flex justify-center mb-2">
           <Title>요일별 운동 루틴</Title>
-          {/* <Button onClick={handleInitial}>초기화</Button> */}
         </div>
         <div className="mb-2">
-          <Modal>
+          <Button
+            className="bg-btn-main py-2 px-4 rounded-xl hover:opacity-90 transition"
+            onClick={handleAutoRoutine}
+          >
+            주간 루틴 자동 생성
+          </Button>
+          <ConfirmOverwriteModal
+            isOpen={isModalOpen}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        </div>
+        <div className="mb-2">
+          <RoutineFormModal>
             <div className="mb-2">
-              <RoutineForm
-                days={DAYS}
-                onSubmit={addRoutine}
-                className="shadow-none"
-              />
+              <RoutineForm onSubmit={addRoutine} className="shadow-none" />
             </div>
-          </Modal>
-
-          <div className="flex justify-between">
-            <Button
-              key="all"
-              name="day"
-              value={String(0)}
-              onClick={handleChange}
-              className={`${selectedDay === "0" ? "!bg-btn-main" : ""}`}
-            >
-              전체
-            </Button>
-            {DAYS.map((day, i) => (
-              <Button
-                key={day}
-                name="day"
-                value={String(i + 1)}
-                onClick={handleChange}
-                className={`${
-                  String(i + 1) === selectedDay ? "!bg-btn-main" : ""
-                }`}
-              >
-                {day}
-              </Button>
-            ))}
-          </div>
+          </RoutineFormModal>
+          <DayTab day={selectedDay} all={true} onClick={handleChange} />
         </div>
         <div className="space-y-4">
           <RoutineList
-            items={getFilterRoutines(selectedDay)}
-            days={DAYS}
+            items={filteredRoutines}
             onDelete={handleDelete}
             onUpdate={handleUpdate}
-            onClear={handleClear}
+            onReset={handleReset}
           />
         </div>
         <div className="fixed right-5 bottom-24 z-50">

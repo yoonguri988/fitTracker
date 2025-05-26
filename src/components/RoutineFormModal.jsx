@@ -1,8 +1,7 @@
 import ReactDOM from "react-dom";
 import { useModalStore } from "@/stores/useModalStore";
-import Button from "@/components/ui/Button";
 
-export const Modal = ({ children }) => {
+export const RoutineFormModal = ({ children }) => {
   const { isOpen, closeModal } = useModalStore();
 
   if (!isOpen) return null;
@@ -13,7 +12,7 @@ export const Modal = ({ children }) => {
       onClick={closeModal}
     >
       <div
-        className="bg-base-point rounded-ss-xl rounded-se-xl p-6 animate-slide-up"
+        className="w-full bg-base rounded-ss-xl rounded-se-xl p-6 animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between mb-2">

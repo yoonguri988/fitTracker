@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply text-xs text-sub;
+html,
+body,
+#root {
+  @apply text-xs text-sub min-w-[360px] min-h-[740px];
 }

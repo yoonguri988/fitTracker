@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import { SelectInput } from "@/components/ui/Select";
+import { DayTab } from "@/components/ui/DayTab";
 import { useModalStore } from "@/stores/useModalStore";
 import { RoutineSchema } from "@/schema/RoutineSchema";
 
@@ -8,6 +10,7 @@ const INTI_VALUES = {
   id: "",
   day: "1",
   name: "",
+  category: "0",
   time: "", // 기준(분)
   sets: "",
   reps: "",
@@ -15,7 +18,6 @@ const INTI_VALUES = {
 
 export default function RoutineForm({
   initValues = INTI_VALUES,
-  days,
   onSubmit,
   onCancel,
   className = "",
@@ -54,33 +56,29 @@ export default function RoutineForm({
     <form
       method="post"
       onSubmit={handleSubmit}
-      className={`bg-base-point p-1.5 rounded-sm shadow ${className}`}
+      className={`bg-base p-1.5 rounded-sm shadow ${className}`}
     >
       <div>
-        <div className="flex justify-between mb-2">
-          {days.map((day, i) => (
-            <Button
-              key={day}
-              name="day"
-              value={String(i + 1)}
-              onClick={handleChange}
-              className={`${
-                String(i + 1) === values.day ? "!bg-btn-main" : ""
-              }`}
-            >
-              {day}
-            </Button>
-          ))}
-        </div>
+        <DayTab day={values.day} onClick={handleChange} className="mb-2" />
         <div className="mb-1">
-          <Input
-            type="text"
-            name="name"
-            placeholder="운동 이름 (최대 20자)"
-            value={values.name}
-            onChange={handleChange}
-            label={`운동 이름`}
-          />
+          <div className="flex justify-between mb-2 gap-2">
+            <Input
+              type="text"
+              name="name"
+              placeholder="운동 이름 (최대 20자)"
+              value={values.name}
+              onChange={handleChange}
+              label={`운동 이름`}
+              className={`w-3/4`}
+            />
+            <SelectInput
+              name="category"
+              value={values.category}
+              list="CATEGORY"
+              onChange={handleChange}
+              className={`w-1/4`}
+            />
+          </div>
           <Input
             type="number"
             name="time"
@@ -114,19 +112,19 @@ export default function RoutineForm({
           <div className="m-2">
             * 상세기록을 입력하지 않으면 0으로 자동 입력돼요.
           </div>
-          <div>
-            <Button type="submit" disabled={!isVaild} className="w-full">
-              추가하기
-            </Button>
+          <div className="flex justify-between gap-4">
             {onCancel && (
               <Button
                 type="button"
                 onClick={onCancel}
-                className={`bg-sub-lg mt-1 hover:bg-sub-dk hover:bg-opacity-30`}
+                className={`bg-sub-lg hover:bg-sub-dk hover:bg-opacity-30`}
               >
                 취소
               </Button>
             )}
+            <Button type="submit" disabled={!isVaild} className="w-full">
+              추가하기
+            </Button>
           </div>
         </div>
       </div>

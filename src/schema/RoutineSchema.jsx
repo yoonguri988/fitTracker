@@ -7,10 +7,7 @@ export const RoutineSchema = z.object({
     .string()
     .min(1, "이름은 필수 입력입니다.")
     .max(20, "최대 20자 입니다."),
-  time: z.coerce
-    .number()
-    .min(1, "운동 시간은 필수 입력입니다.")
-    .max(3, "최대 999분 입니다."),
+  time: z.coerce.number().max(999, "최대 999분 입니다."),
 });
 
 export const RoutineSaveSchema = z.object({

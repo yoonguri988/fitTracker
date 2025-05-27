@@ -13,20 +13,17 @@ const navItems = [
 
 function BottomNav() {
   return (
-    <nav className="fixed bottom-2 left-0 right-0 bg-green-500 shadow-inner h-16 flex justify-around items-center rounded-xl z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-btn-main h-16 flex justify-around items-center rounded-tl-xl rounded-tr-xl z-40">
       {navItems.map((item) => (
         <NavLink
           key={item.to}
           to={item.to}
-          className={({ isActive }) =>
-            `text-base font-semibold ${
-              isActive ? "text-green-800" : "text-white"
-            } hover:text-green-800`
-          }
+          className={({ isActive }) => ` ${isActive ? "font-semibold" : ""}
+          hover:font-semibold`}
         >
           <button>
             <div>{item.img}</div>
-            <div className="text-xs">{item.label}</div>
+            <div className="text-xs text-main">{item.label}</div>
           </button>
         </NavLink>
       ))}

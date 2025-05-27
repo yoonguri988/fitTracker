@@ -4,6 +4,7 @@ function Button({
   type = "button",
   name = "",
   value = "",
+  disabled = false,
   className = "",
 }) {
   return (
@@ -12,7 +13,12 @@ function Button({
       name={name}
       value={value}
       onClick={onClick}
-      className={`bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl ${className}`}
+      disabled={disabled}
+      className={`w-full bg-btn-sub text-sub px-2 py-1 rounded-xl ${
+        !disabled
+          ? "bg-btn-main hover:bg-btn-main"
+          : "bg-btn-del text-opacity-50"
+      } ${className}`}
     >
       {children}
     </button>

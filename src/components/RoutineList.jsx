@@ -82,7 +82,7 @@ export default function RoutineList({ items, onUpdate, onDelete, onReset }) {
           </li>
         );
       })}
-      {items.length !== 0 && (
+      {onReset && items.length !== 0 && (
         <li className="text-center mt-5">
           <Button onClick={onReset} className="w-20">
             초기화

@@ -1,3 +1,10 @@
 export function cn(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
+export const getDayKey = () => {
+  // getDay()는 일(0) ~ 토(6) 으로 구성
+  const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
+  const monFirstDay = (new Date().getDay() + 6) % 7; // 월요일(0) 기준
+  return DAYS[monFirstDay];
+};

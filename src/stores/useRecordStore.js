@@ -1,24 +1,20 @@
 import { v4 as uuidv4 } from "uuid";
-import { z } from "zod";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { RecordSchema } from "@/schema/RecordSchema";
 
-const STORAGE_KEY = "fittracker-record-session";
-
-const recordSchema = z.object({
-  id: z.string(),
-  name: z.string().min(1, "운동 이름을 입력해주세요."),
-  sets: z.number().min(1, "세트 수는 1 이상이어야 합니다."),
-  reps: z.number().min(1, "반복 수는 1 이상이어야 합니다."),
-  // completedReps: z.array(z.number()).optional(),
-  // completedSets: z.number().optional(),
-  createdAt: z.string().min(1, "생성일자는 필수입니다."),
-});
+const STORAGE_KEY = "fitTracker-record-session";
 
 const useRecordStore = create(
   persist(
     (set, get) => ({
       records: [],
+      // 날짜별 완료된 운동 기록
+      completedRecords: [],
+      // 운동 기록 저장 Action
+      saveRecord: (date, record) => {},
+      // 저장된 날짜 기록 불러오기
+      loadRecord: (date) => {},
 
       // 초기 루틴 리스트 설정
       setRecords: (newRecords) => set({ records: newRecords }),
@@ -49,7 +45,7 @@ const useRecordStore = create(
           completedSets: 0,
           completedReps: [],
         };
-        const result = recordSchema.safeParse(newRecord);
+        const result = RecordSchema.safeParse(newRecord);
 
         if (!result.success) {
           console.error(
@@ -76,7 +72,7 @@ const useRecordStore = create(
       },
     }),
     {
-      name: STORAGE_KEY,
+      name: STORAGE_KEY, // 날짜별 기록을 저장하는 키
       storage: {
         getItem: (key) => {
           const value = sessionStorage.getItem(key);

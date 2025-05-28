@@ -61,18 +61,18 @@ function RecordPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="p-6">
-        <div className="flex justify-center gap-1">
+      <div className="px-6 py-4">
+        <div className="flex justify-center gap-1 sticky top-0 z-40 p-2 bg-white">
           <div className="text-sm px-2 py-1">
             {date} ({getDayKey()})
           </div>
-          <div className=" bg-btn-main text-white rounded-m px-2 py-1">
+          <div className=" bg-btn-main text-white rounded-xl px-1 pt-1.5">
             오늘
           </div>
         </div>
         <div className="flex justify-between mb-2">
           <div className="font-semibold">
-            오늘 한 운동
+            오늘 운동 루틴
             <span className="text-blue-500"> {todayRoutines.length}</span>
           </div>
           <div className="font-semibold">
@@ -80,7 +80,7 @@ function RecordPage() {
             <span className="text-green-800"> {getTime(totalTime)}</span>
           </div>
         </div>
-        <div className=" space-y-4">
+        <div className="">
           <RecordList
             isChecked={isCompleted}
             onChange={toggleCompleted}

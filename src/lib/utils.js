@@ -8,3 +8,9 @@ export const getDayKey = () => {
   const monFirstDay = (new Date().getDay() + 6) % 7; // 월요일(0) 기준
   return DAYS[monFirstDay];
 };
+
+export const getTime = (time) => {
+  const hour = Math.round(time / 60);
+  const min = Math.round(time % 60);
+  return hour > 0 ? `${hour}시간 ${min}분` : `${min}분`;
+};

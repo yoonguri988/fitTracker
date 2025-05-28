@@ -19,6 +19,7 @@ export default {
         "input-tx": "#96918A",
       },
       borderRadius: {
+        m: "0.7rem",
         lg: "1rem",
         xl: "1.5rem",
         full: "9999px",

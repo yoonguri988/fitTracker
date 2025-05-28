@@ -7,7 +7,7 @@ const ConfirmOverwriteModal = ({ isOpen, onConfirm, onCancel }) => {
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-2xl w-60 text-center">
         <div className="mb-2">
-          이미 등록된 루틴이 있습니다.
+          이미 등록된 내용이 있습니다.
           <br />
           덮어쓰시겠습니까?
         </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Card from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import RoutineForm from "@/components/RoutineForm";
 import { DayTabByDay } from "@/components/ui/DayTab";

@@ -10,7 +10,7 @@ export const getDayKey = () => {
 };
 
 export const getTime = (time) => {
-  const hour = Math.round(time / 60);
+  const hour = Math.floor(time / 60);
   const min = Math.round(time % 60);
   return hour > 0 ? `${hour}시간 ${min}분` : `${min}분`;
 };

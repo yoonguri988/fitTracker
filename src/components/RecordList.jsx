@@ -1,4 +1,4 @@
-import Card from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import Checkbox from "@/components/ui/Checkbox";
 import { Check } from "lucide-react";
 
@@ -8,7 +8,7 @@ function RecordListItem({ item, isChecked, onChange }) {
   return (
     <Card
       className={`flex justify-between items-center gap-2 p-2 rounded-lg transition duration-200 ease-in-out
-        ${done ? "bg-sub-lg text-sub-dk opacity-50 line-through" : "bg-white"}
+        ${done ? "bg-sub-lg text-sub-dk opacity-50" : "bg-white"}
       `}
     >
       <Checkbox
@@ -42,7 +42,7 @@ export default function RecordList({ items, isChecked, onChange }) {
   const progressBarColor = isAllDone ? "bg-btn-main" : "bg-btn-sub";
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-3 mb-2">
       {items.length > 0 && (
         <li>
           <div className="flex justify-center gap-1 mb-1">

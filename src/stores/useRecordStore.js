@@ -1,3 +1,4 @@
+import { RecordSchema } from "@/schema/RecordSchema";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -31,7 +32,7 @@ export const useRecordStore = create(
       isCompleted: (id) => get().completedRoutines.includes(id),
 
       // 날짜별 운동 기록 저장
-      saveRecordForToday: (date, items, force = false) => {
+      saveRecordForToday: (date, items, memo, force = false) => {
         const current = get().records;
 
         // 이미 저장되어 있고 강제 저장이 아닐 경우 return
@@ -44,8 +45,17 @@ export const useRecordStore = create(
 
         const updated = {
           ...current,
-          [date]: completedItems,
+          [date]: {
+            records: completedItems,
+            memo,
+          },
         };
+
+        const result = RecordSchema.safeParse(updated);
+        if (!result.success) {
+          console.error(`record 데이터 저장 실패: ${result.error.format()}`);
+          return;
+        }
 
         set({ records: updated });
       },
